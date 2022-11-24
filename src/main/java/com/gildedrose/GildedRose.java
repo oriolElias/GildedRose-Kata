@@ -3,6 +3,14 @@ package com.gildedrose;
 class GildedRose {
     Item[] items;
 
+    public Item[] getItems() {
+        return items;
+    }
+
+    public void setItems(Item[] items) {
+        this.items = items;
+    }
+
     public GildedRose(Item[] items) {
         this.items = items;
     }
