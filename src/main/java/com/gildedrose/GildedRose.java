@@ -61,7 +61,7 @@ class GildedRose {
         }
 
         if (isExpired) {
-            item.quality = item.quality - item.quality;
+            item.quality = 0;
         }
     }
 
