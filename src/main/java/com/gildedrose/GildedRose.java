@@ -26,49 +26,56 @@ class GildedRose {
     }
 
     private void updateItemQuality(Item item) {
+        boolean doesDegrade = !item.name.equals(AGED_BRIE) && !item.name.equals(BACKSTAGE_PASSES) && !item.name.equals(SULFURAS);
+        if (!item.name.equals(SULFURAS)) {
+            item.sellIn = item.sellIn - 1;
+        }
+        boolean isExpired = item.sellIn < 0;
+        int degradeRate = calculateDegradeRate(item, isExpired);
+
+        if (doesDegrade) {
+            adjustQuality(item, degradeRate);
+        }
+
+        if (item.name.equals(AGED_BRIE) ) {
+            adjustQuality(item, 1);
+            if(isExpired){
+                adjustQuality(item, 1);
+            }
+        }
+
+        if (item.name.equals(BACKSTAGE_PASSES)) {
+            handleBackStagePassQualityLogic(item, isExpired);
+        }
+
+    }
+
+    private void handleBackStagePassQualityLogic(Item item, boolean isExpired) {
+        adjustQuality(item, 1);
+        if (item.sellIn < 11) {
+            adjustQuality(item, 1);
+        }
+
+        if (item.sellIn < 6) {
+            adjustQuality(item, 1);
+        }
+
+        if (isExpired) {
+            item.quality = item.quality - item.quality;
+        }
+    }
+
+    private int calculateDegradeRate(Item item, boolean isExpired) {
         int degradeRate;
         if(item.name.equals(CONJURED_MANA_CAKE)){
             degradeRate = -2;
         }else{
             degradeRate = -1;
         }
-        boolean doesDegrade = !item.name.equals(AGED_BRIE) && !item.name.equals(BACKSTAGE_PASSES) && !item.name.equals(SULFURAS);
-
-        if (doesDegrade) {
-            adjustQuality(item, degradeRate);
+        if(isExpired){
+            degradeRate *= 2;
         }
-
-        if (item.name.equals(AGED_BRIE) || item.name.equals(BACKSTAGE_PASSES)) {
-            adjustQuality(item, 1);
-        }
-
-        if (item.name.equals(BACKSTAGE_PASSES)) {
-            if (item.sellIn < 11) {
-                adjustQuality(item, 1);
-            }
-
-            if (item.sellIn < 6) {
-                adjustQuality(item, 1);
-            }
-        }
-
-        if (!item.name.equals(SULFURAS)) {
-            item.sellIn = item.sellIn - 1;
-        }
-
-        if (item.sellIn < 0) {
-            if (!item.name.equals(AGED_BRIE)) {
-                if (!item.name.equals(BACKSTAGE_PASSES)) {
-                    if (!item.name.equals(SULFURAS)) {
-                        adjustQuality(item, degradeRate);
-                    }
-                } else {
-                    item.quality = item.quality - item.quality;
-                }
-            } else {
-                adjustQuality(item, 1);
-            }
-        }
+        return degradeRate;
     }
 
     private void adjustQuality(Item item, int adjustment) {
