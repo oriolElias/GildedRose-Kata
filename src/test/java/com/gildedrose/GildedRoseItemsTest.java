@@ -122,7 +122,7 @@ public class GildedRoseItemsTest {
         gildedRose.updateQuality();
 
         Item actual = gildedRose.getItems()[0];
-        Item expected = new Item("Conjured Mana Cake", 3, 4);
+        Item expected = new Item("Conjured Mana Cake", 2, 4);
         assertEquals(expected.toString(),actual.toString());
     }
 

@@ -4,6 +4,7 @@ class GildedRose {
     public static final String AGED_BRIE = "Aged Brie";
     public static final String BACKSTAGE_PASSES = "Backstage passes to a TAFKAL80ETC concert";
     public static final String SULFURAS = "Sulfuras, Hand of Ragnaros";
+    public static final String CONJURED_MANA_CAKE = "Conjured Mana Cake";
     Item[] items;
 
     public Item[] getItems() {
@@ -25,9 +26,15 @@ class GildedRose {
     }
 
     private void updateItemQuality(Item item) {
+        int degradeRate;
+        if(item.name.equals(CONJURED_MANA_CAKE)){
+            degradeRate = -2;
+        }else{
+            degradeRate = -1;
+        }
         if (!item.name.equals(AGED_BRIE) && !item.name.equals(BACKSTAGE_PASSES)) {
             if (!item.name.equals(SULFURAS)) {
-                adjustQuality(item, -1);
+                adjustQuality(item, degradeRate);
             }
         } else {
             adjustQuality(item, 1);
@@ -51,7 +58,7 @@ class GildedRose {
             if (!item.name.equals(AGED_BRIE)) {
                 if (!item.name.equals(BACKSTAGE_PASSES)) {
                     if (!item.name.equals(SULFURAS)) {
-                        adjustQuality(item, -1);
+                        adjustQuality(item, degradeRate);
                     }
                 } else {
                     item.quality = item.quality - item.quality;
